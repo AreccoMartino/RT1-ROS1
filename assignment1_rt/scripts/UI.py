@@ -3,6 +3,7 @@
 import rospy
 from geometry_msgs.msg import Twist
 from turtlesim.srv import Spawn
+from threading import Timer
 
 
 ##################### SPAWN #####################
@@ -18,7 +19,7 @@ def spawn_turtle():
         return  # Exit if the service call fails
 
 ##################### TURTLE #####################
-def turtle_choiche():
+def turtle_choice():
 	while True:
 		# Select the turtle
 		turtle_id = input("\n\nSelect 1 to move turtle1 or select 2 to move turtle2: ")
@@ -37,7 +38,7 @@ def turtle_choiche():
 	
 
 ##################### VEL #####################
-def vel_choiche():
+def vel_choice():
 	# Set up velocities for the turtle
 	vel = Twist()
 
@@ -56,13 +57,12 @@ def vel_choiche():
 ##################### MOVE #####################
 def move_turtle(pub,vel):
 	# Publish the velocity for 1 second
-	t0 = rospy.Time.now()
-	while (rospy.Time.now() - t0).to_sec() < 1.0:
-		pub.publish(vel)
-
-	# Stop the turtle by setting velocities to zero
+	
+	pub.publish(vel)
 	stop_vel = Twist()  
-	pub.publish(stop_vel)  
+	# After one second the turtle is stopped 
+	t = Timer(1.0, lambda: pub.publish(stop_vel))
+	t.start()
 
 	rospy.loginfo("Velocities published for 1 second, then stopped.")
 	print("\nReturning to selection...\n")
@@ -75,13 +75,12 @@ def main():
 
 	while not rospy.is_shutdown():
         
-		pub = turtle_choiche()
+		pub = turtle_choice()
         
-		vel = vel_choiche()
+		vel = vel_choice()
 
 		move_turtle(pub,vel)
 
 ##################### #### #####################
 if __name__ == '__main__':
     main()
-
