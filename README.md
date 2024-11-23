@@ -10,7 +10,7 @@ Please move to your workspace and then in the src folder clone the repository
 git clone <URL_of_this_repository>
 ```
 
-Following the instruction the final state of the path will be /.../<your_workspace>/src/assignment1_rt/ and in assignment1_rt will be placed all the necessary files.
+Following the instructions the final state of the path will be /.../<your_workspace>/src/assignment1_rt/ and in assignment1_rt will be placed all the necessary files.
 
 ### 1. Start roscore
 
