@@ -37,6 +37,8 @@ def turtle2_vel_callback(msg):
 def turtle_callback1(msg):
     global turtle1_pos, pub1
     turtle1_pos = msg
+    check_distance_and_control()
+    check_margin_and_control()
 
 def turtle_callback2(msg):
     global turtle2_pos, pub2
@@ -56,7 +58,7 @@ def scale_velocities(vel):
 	return scaled_vel
 
 ##################### DISTANCE BETWEEN TURTLES #####################
-def check_distance_and_control(event):
+def check_distance_and_control():
 	global turtle1_pos, turtle2_pos, pub1, pub2, turtle1_vel, turtle2_vel, temp_vel_1, temp_vel_2, distance_flag
 	if turtle1_pos is not None and turtle2_pos is not None:
 		value = (turtle1_pos.x - turtle2_pos.x)**2 + (turtle1_pos.y - turtle2_pos.y)**2
@@ -76,9 +78,13 @@ def check_distance_and_control(event):
 				temp_vel_2.linear.x = 0;
 				temp_vel_2.linear.y = 0;
 				temp_vel_2.angular.z = 0;
+				print("[Distance corrected between turtles] :   " + str(distance))
+				print("------------------------------------------------------------")
 				
 		
 		if distance < 1.0 and not distance_flag:
+			print("------------------------------------------------------------")
+			print("[Distance violation between turtles] :   " + str(distance))
 			# Preparation of the velocities to distance the turtles after the stop (to put them again in safe zone)
 			# The turtle that was moved go back in the same direction (-vel*0.1)
 			temp_vel_1 = scale_velocities(turtle1_vel)
@@ -99,7 +105,7 @@ def is_turtle_stopped(vel):
     return vel.linear.x == 0 and vel.linear.y == 0 and vel.angular.z == 0
 
 ##################### MARGIN CONTROL #####################
-def check_margin_and_control(event):
+def check_margin_and_control():
     global turtle1_pos, turtle2_pos, pub1, pub2, turtle1_vel, turtle2_vel
 
     stop_vel = Twist()
@@ -108,7 +114,6 @@ def check_margin_and_control(event):
     if turtle1_pos is not None:
         if turtle1_pos.x > 10 or turtle1_pos.x < 1 or turtle1_pos.y > 10 or turtle1_pos.y < 1:
             pub1.publish(stop_vel)
-            rospy.logwarn("Turtle1 fuori dai limiti. Fermata.")
             
             rospy.wait_for_service("/turtle1/teleport_absolute")
             client1 = rospy.ServiceProxy("/turtle1/teleport_absolute", TeleportAbsolute)
@@ -125,7 +130,6 @@ def check_margin_and_control(event):
     if turtle2_pos is not None:
         if turtle2_pos.x > 10 or turtle2_pos.x < 1 or turtle2_pos.y > 10 or turtle2_pos.y < 1:
             pub2.publish(stop_vel)
-            rospy.logwarn("Turtle2 fuori dai limiti. Fermata.")
 
             rospy.wait_for_service("/turtle2/teleport_absolute")
             client2 = rospy.ServiceProxy("/turtle2/teleport_absolute", TeleportAbsolute)
@@ -149,8 +153,8 @@ def main():
 	rospy.Subscriber('/turtle1/cmd_vel', Twist, turtle1_vel_callback)
 	rospy.Subscriber('/turtle2/cmd_vel', Twist, turtle2_vel_callback)
 
-	rospy.Timer(rospy.Duration(0.0005), check_distance_and_control)
-	rospy.Timer(rospy.Duration(0.0005), check_margin_and_control)
+	#rospy.Timer(rospy.Duration(0.0005), check_distance_and_control)
+	#rospy.Timer(rospy.Duration(0.0005), check_margin_and_control)
     
 	rospy.spin()
 

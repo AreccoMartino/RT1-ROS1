@@ -50,7 +50,7 @@ def vel_choice():
 			vel.angular.z = float(input("Wz = "))
 			break  # Esce dal loop se tutti gli input sono corretti
 		except ValueError:
-			print("Errore: per favore inserisci un numero valido per ciascun valore.")
+			print("Error: Please select a valid velocity value.")
 	
 	return vel
 	
