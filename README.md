@@ -2,6 +2,16 @@
 
 ## How to use turtlesim nodes
 
+### 0. Clone the repository
+
+Please move to your workspace and then in the src folder clone the repository
+
+```bash
+git clone <URL_of_this_repository>
+```
+
+Following the instructions the final state of the path will be /.../<your_workspace>/src/assignment1_rt/ and in assignment1_rt will be placed all the necessary files.
+
 ### 1. Start roscore
 
 To get started, it is necessary to start roscore, which is the heart of the ROS system. Open a terminal and type the following command:
