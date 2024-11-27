@@ -5,6 +5,7 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 import time
 from turtlesim.srv import TeleportAbsolute
+from std_msgs.msg import Float32
 
 ##################### GLOB VAR #####################
 turtle1_pos = None
@@ -19,6 +20,7 @@ distance_flag = False
 
 pub1 = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=1)
 pub2 = rospy.Publisher('/turtle2/cmd_vel', Twist, queue_size=1)
+pub_distance = rospy.Publisher('/distance', Float32, queue_size=1)
 
 turtle1_vel = Twist()
 turtle2_vel = Twist()
@@ -59,13 +61,22 @@ def check_distance_and_control(event):
 	if turtle1_pos is not None and turtle2_pos is not None:
 		value = (turtle1_pos.x - turtle2_pos.x)**2 + (turtle1_pos.y - turtle2_pos.y)**2
 		distance = value**0.5
-		print(distance)
+		#print(distance)
+		pub_distance.publish(distance)
 		
 		if distance_flag:
 			pub1.publish(temp_vel_1)
 			pub2.publish(temp_vel_2)
 			if distance > 1.0:
 				distance_flag = False
+				# reset to zero the velocity for the distance correction
+				temp_vel_1.linear.x = 0;
+				temp_vel_1.linear.y = 0;
+				temp_vel_1.angular.z = 0;
+				temp_vel_2.linear.x = 0;
+				temp_vel_2.linear.y = 0;
+				temp_vel_2.angular.z = 0;
+				
 		
 		if distance < 1.0 and not distance_flag:
 			# Preparation of the velocities to distance the turtles after the stop (to put them again in safe zone)
@@ -129,9 +140,9 @@ def check_margin_and_control(event):
 
 ##################### MAIN #####################
 def main():
-	global turtle1_pos, turtle2_pos, pub1, pub2
+	global turtle1_pos, turtle2_pos, pub1, pub2,distance
 	rospy.init_node('Distance', anonymous=True)
-    
+	
 	rospy.Subscriber('/turtle1/pose', Pose, turtle_callback1)
 	rospy.Subscriber('/turtle2/pose', Pose, turtle_callback2)
     
