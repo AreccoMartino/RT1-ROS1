@@ -1,5 +1,9 @@
 # Turtlesim Control with UI and Distance Monitoring
 
+![Descrizione dell'immagine](https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/256/grotle.png)    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       ![Descrizione dell'immagine](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiL8Il-zkRrexK9ce_4fZm-Y7MSTMPnQc65Ts35oHA6pESgXDYmiMSkBV5k4asnuekT0OB5SJmH4exPkA2Hjl91LUl19BCrYEa3A6pJgI5eBklNW4yi8kQsyHdjjLlJe3lBmTUUKFaBCKM/s400/images.png)    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       ![Descrizione dell'immagine](https://pokestop.io/img/pokemon/squirtle-256x256.png) 
+
+
+
 ## How to use turtlesim nodes
 
 ### 0. Clone the repository
@@ -36,7 +40,7 @@ Run the UI node:
 In the first terminal, go to the workspace src directory and start the UI node with the following command:
 
 ```bash
-rosrun <package_name> UI.py
+rosrun assignment1_rt UI.py
 ```
 Replace <package_name> with the actual name of your ROS package.
 
@@ -45,7 +49,7 @@ Run the Distance node:
 In the second terminal, go to the workspace src directory and start the Distance node with the following command:
 
 ```bash
-rosrun <package_name> Distance.py
+rosrun assignment1_rt Distance.py
 ```
 Again, replace <package_name> with the name of the package in which Distance.py is located.
 
