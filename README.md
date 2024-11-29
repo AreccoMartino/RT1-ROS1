@@ -14,7 +14,7 @@ Please move to your workspace and then in the src folder clone the repository
 git clone <URL_of_this_repository>
 ```
 
-Following the instructions the final state of the path will be /.../<your_workspace>/src/assignment1_rt/ and in assignment1_rt will be placed all the necessary files.
+Following the instructions the final state of the path will be /.../<your_workspace>/src/assignment1_rt/ and in assignment1_rt will be placed all the necessary files. 
 
 ### 1. Start roscore
 
@@ -99,9 +99,6 @@ If a turtle crosses the boundary, it is teleported back to the nearest valid pos
 
 *----- Velocity and Movement Management: -----*
 
-Publishes Twist messages with inverted velocities to move turtles apart when resolving proximity issues.
-Uses the teleport service to handle boundary violations, resetting turtles to safe positions.
+When two turtles collide, the system publishes Twist messages with inverted velocities to separate them. Each turtle moves in the opposite direction of its current motion, scaled by a factor of 0.01, until they are at a safe distance. Once the collision is resolved, the turtles are stopped, creating the effect of a brief halt. This ensures smooth and realistic behavior during proximity resolution.
 
-*----- Timers for Periodic Checks: -----*
 
-Implements periodic distance and boundary checks using ROS timers, ensuring continuous monitoring in real-time.
