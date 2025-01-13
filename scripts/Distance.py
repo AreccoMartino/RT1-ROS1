@@ -7,6 +7,11 @@ import time
 from turtlesim.srv import TeleportAbsolute
 from std_msgs.msg import Float32
 
+# need to include the laser
+import std_msgs.msg import Laser
+
+
+
 ##################### GLOB VAR #####################
 turtle1_pos = None
 turtle2_pos = None
@@ -24,6 +29,12 @@ pub_distance = rospy.Publisher('/distance', Float32, queue_size=1)
 
 turtle1_vel = Twist()
 turtle2_vel = Twist()
+
+
+# minimum distance 
+distance_min = 1.0;
+# global array of laser
+laser_array = [0.0] * 16;
 
 ##################### CALLBACK #####################
 def turtle1_vel_callback(msg):
@@ -43,6 +54,14 @@ def turtle_callback1(msg):
 def turtle_callback2(msg):
     global turtle2_pos, pub2
     turtle2_pos = msg
+    
+    
+# new callback for the laser
+def laser_callback(msg):
+	global laser_array
+	laser_array = msg;
+    
+    
 
 ##################### SCALE VEL #####################
 def scale_velocities(vel):
@@ -144,7 +163,7 @@ def check_margin_and_control():
 
 ##################### MAIN #####################
 def main():
-	global turtle1_pos, turtle2_pos, pub1, pub2,distance
+	global turtle1_pos, turtle2_pos, pub1, pub2,distance, laser_array, distance_min 
 	rospy.init_node('Distance', anonymous=True)
 	
 	rospy.Subscriber('/turtle1/pose', Pose, turtle_callback1)
@@ -155,6 +174,20 @@ def main():
 
 	#rospy.Timer(rospy.Duration(0.0005), check_distance_and_control)
 	#rospy.Timer(rospy.Duration(0.0005), check_margin_and_control)
+	
+	
+	# subscriber to the turtle1 laser
+	rospy.Subscriber('/turtle1/obstacles', float64[], laser_callback)
+	
+	# for cicle to iterate on the array of the obstacles to see if one of them is too close
+	for i in laser_array:
+		if i < distance_min
+			# Stop the turtles if one of the laser sensors detect that one obstacle is under a certain distance 
+			stop_vel = Twist()
+			pub1.publish(stop_vel)
+        		
+          
+    
     
 	rospy.spin()
 
